@@ -33,8 +33,7 @@ import com.example.android.asynctaskloader.utilities.NetworkUtils;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
     /* A constant to save and restore the URL that is being displayed */
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
@@ -81,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * This method retrieves the search text from the EditText, constructs the
-     * URL (using {@link NetworkUtils}) for the github repository you'd like to find, displays
-     * that URL in a TextView, and finally request that an AsyncTaskLoader performs the GET request.
+     * This method retrieves the search text from the EditText, constructs the URL (using {@link NetworkUtils}) for the
+     * github repository you'd like to find, displays that URL in a TextView, and finally request that an
+     * AsyncTaskLoader performs the GET request.
      */
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
@@ -134,11 +133,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * This method will make the View for the JSON data visible and
-     * hide the error message.
+     * This method will make the View for the JSON data visible and hide the error message.
      * <p>
-     * Since it is okay to redundantly set the visibility of a View, we don't
-     * need to check whether each view is currently visible or invisible.
+     * Since it is okay to redundantly set the visibility of a View, we don't need to check whether each view is
+     * currently visible or invisible.
      */
     private void showJsonDataView() {
         /* First, make sure the error is invisible */
@@ -148,11 +146,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * This method will make the error message visible and hide the JSON
-     * View.
+     * This method will make the error message visible and hide the JSON View.
      * <p>
-     * Since it is okay to redundantly set the visibility of a View, we don't
-     * need to check whether each view is currently visible or invisible.
+     * Since it is okay to redundantly set the visibility of a View, we don't need to check whether each view is
+     * currently visible or invisible.
      */
     private void showErrorMessage() {
         /* First, hide the currently visible data */
@@ -165,7 +162,9 @@ public class MainActivity extends AppCompatActivity implements
     public Loader<String> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<String>(this) {
 
-            // TODO (1) Create a String member variable called mGithubJson that will store the raw JSON
+            // COMPLETED (1) Create a String member variable called mGithubJson that will store the raw JSON
+
+            String mGithubJson;
 
             @Override
             protected void onStartLoading() {
@@ -181,8 +180,12 @@ public class MainActivity extends AppCompatActivity implements
                  */
                 mLoadingIndicator.setVisibility(View.VISIBLE);
 
-                // TODO (2) If mGithubJson is not null, deliver that result. Otherwise, force a load
-                forceLoad();
+                // COMPLETED (2) If mGithubJson is not null, deliver that result. Otherwise, force a load
+                if (mGithubJson != null) {
+                    deliverResult(mGithubJson);
+                } else {
+                    forceLoad();
+                }
             }
 
             @Override
@@ -207,8 +210,15 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
 
-            // TODO (3) Override deliverResult and store the data in mGithubJson
-            // TODO (4) Call super.deliverResult after storing the data
+            // COMPLETED (3) Override deliverResult and store the data in mGithubJson
+
+            @Override
+            public void deliverResult(String data) {
+                mGithubJson = data;
+                super.deliverResult(data);
+            }
+
+            // COMPLETED (4) Call super.deliverResult after storing the data
         };
     }
 

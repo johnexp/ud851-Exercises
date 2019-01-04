@@ -18,6 +18,8 @@ package com.example.android.implicitintents;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.app.ShareCompat.IntentBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -31,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This method is called when the Open Website button is clicked. It will open the website
-     * specified by the URL represented by the variable urlAsString using implicit Intents.
+     * This method is called when the Open Website button is clicked. It will open the website specified by the URL
+     * represented by the variable urlAsString using implicit Intents.
      *
      * @param v Button that was clicked.
      */
@@ -42,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This method is called when the Open Location in Map button is clicked. It will open the
-     * a map to the location represented by the variable addressString using implicit Intents.
+     * This method is called when the Open Location in Map button is clicked. It will open the a map to the location
+     * represented by the variable addressString using implicit Intents.
      *
      * @param v Button that was clicked.
      */
@@ -51,48 +53,43 @@ public class MainActivity extends AppCompatActivity {
         String addressString = "1600 Amphitheatre Parkway, CA";
 
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("geo")
-                .path("0,0")
-                .query(addressString);
+        builder.scheme("geo").path("0,0").query(addressString);
         Uri addressUri = builder.build();
 
         showMap(addressUri);
     }
 
     /**
-     * This method is called when the Share Text Content button is clicked. It will simply share
-     * the text contained within the String textThatYouWantToShare.
+     * This method is called when the Share Text Content button is clicked. It will simply share the text contained
+     * within the String textThatYouWantToShare.
      *
      * @param v Button that was clicked.
      */
     public void onClickShareTextButton(View v) {
-        // TODO (5) Specify a String you'd like to share
+        // COMPLETED (5) Specify a String you'd like to share
+        String message = "Some message to share";
 
-        // TODO (6) Replace the Toast with shareText, passing in the String from step 5
-        Toast.makeText(this, "TODO: Share text when this is clicked", Toast.LENGTH_LONG).show();
+        // COMPLETED (6) Replace the Toast with shareText, passing in the String from step 5
+        shareText(message);
     }
 
     /**
-     * This is where you will create and fire off your own implicit Intent. Yours will be very
-     * similar to what I've done above. You can view a list of implicit Intents on the Common
-     * Intents page from the developer documentation.
-     *
-     * @see <http://developer.android.com/guide/components/intents-common.html/>
+     * This is where you will create and fire off your own implicit Intent. Yours will be very similar to what I've done
+     * above. You can view a list of implicit Intents on the Common Intents page from the developer documentation.
      *
      * @param v Button that was clicked.
+     * @see <http://developer.android.com/guide/components/intents-common.html/>
      */
     public void createYourOwn(View v) {
-        Toast.makeText(this,
-                "TODO: Create Your Own Implicit Intent",
-                Toast.LENGTH_SHORT)
-                .show();
+        String htmlCode = "<h2>Some title</h2>";
+        startMyImplicitIntent(htmlCode);
     }
 
     /**
      * This method fires off an implicit Intent to open a webpage.
      *
-     * @param url Url of webpage to open. Should start with http:// or https:// as that is the
-     *            scheme of the URI expected with this Intent according to the Common Intents page
+     * @param url Url of webpage to open. Should start with http:// or https:// as that is the scheme of the URI
+     * expected with this Intent according to the Common Intents page
      */
     private void openWebPage(String url) {
         /*
@@ -119,10 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method will fire off an implicit Intent to view a location on a map.
-     *
-     * When constructing implicit Intents, you can use either the setData method or specify the
-     * URI as the second parameter of the Intent's constructor,
-     * as I do in {@link #openWebPage(String)}
+     * <p>
+     * When constructing implicit Intents, you can use either the setData method or specify the URI as the second
+     * parameter of the Intent's constructor, as I do in {@link #openWebPage(String)}
      *
      * @param geoLocation The Uri representing the location that will be opened in the map
      */
@@ -143,12 +139,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO (1) Create a void method called shareText that accepts a String as a parameter
-    // Do steps 2 - 4 within the shareText method
+    // COMPLETED (1) Create a void method called shareText that accepts a String as a parameter
+    private void shareText(String text) {
+        // Do steps 2 - 4 within the shareText method
+        // COMPLETED (2) Create a String variable called mimeType and set it to "text/plain"
+        String mimeType = "text/plain";
 
-        // TODO (2) Create a String variable called mimeType and set it to "text/plain"
+        // COMPLETED (3) Create a title for the chooser window that will pop up
+        String title = "Janela";
 
-        // TODO (3) Create a title for the chooser window that will pop up
+        // COMPLETED (4) Use ShareCompat.IntentBuilder to build the Intent and start the chooser
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimeType)
+                .setText(text)
+                .startChooser();
+    }
 
-        // TODO (4) Use ShareCompat.IntentBuilder to build the Intent and start the chooser
+    private void startMyImplicitIntent(String text) {
+        String mimeType = "text/plain";
+        String title = "Abrindo um HTML";
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimeType)
+                .setHtmlText(text)
+                .startChooser();
+    }
 }
